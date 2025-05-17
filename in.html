@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Слайдер с картинками</title>
+<style>
+  body {
+    background: #111;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+  }
+
+  .slider-wrapper {
+    position: relative;
+    width: 800px;
+    height: 400px;
+    max-width: 100%;
+    overflow: hidden;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #000;
+  }
+
+  .slider-track {
+    display: flex;
+    transition: transform 0.4s ease;
+    height: 100%;
+  }
+
+  .slide {
+    min-width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .slide img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+
+  .slide-text {
+    position: absolute;
+    bottom: 20px;
+    left: 20px;
+    right: 20px;
+    background: rgba(0,0,0,0.5);
+    padding: 15px 20px;
+    border-radius: 6px;
+    color: #fff;
+  }
+
+  .slide-text h2 {
+    margin: 0 0 8px;
+    font-size: 1.5rem;
+  }
+
+  .slide-text p {
+    margin: 0;
+    font-size: 1rem;
+    color: #ddd;
+  }
+
+  .arrow-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    border: none;
+    color: #fff;
+    font-size: 2rem;
+    padding: 10px 15px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    z-index: 10;
+    user-select: none;
+    border-radius: 4px;
+  }
+
+  .arrow-btn:hover {
+    background: rgba(255,255,255,0.8);
+    color: #000;
+  }
+
+  .arrow-left {
+    left: 10px;
+  }
+
+  .arrow-right {
+    right: 10px;
+  }
+
+  .slider-dots {
+    position: absolute;
+    bottom: 15px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 12px;
+    z-index: 20;
+  }
+
+  .slider-dot {
+    width: 12px;
+    height: 12px;
+    background-color: #555;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  .slider-dot.active {
+    background-color: #fff;
+  }
+</style>
+</head>
+<body>
+
+<div class="slider-wrapper">
+  <div class="slider-track" id="sliderTrack">
+    <div class="slide">
+      <img src="https://picsum.photos/id/1015/800/400" alt="Слайд 1" />
+      <div class="slide-text">
+        <h2>Слайд 1</h2>
+        <p>Это первый слайд с интересной информацией.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://picsum.photos/id/1016/800/400" alt="Слайд 2" />
+      <div class="slide-text">
+        <h2>Слайд 2</h2>
+        <p>Второй слайд рассказывает больше о вашей партии.</p>
+      </div>
+    </div>
+    <div class="slide">
+      <img src="https://picsum.photos/id/1018/800/400" alt="Слайд 3" />
+      <div class="slide-text">
+        <h2>Слайд 3</h2>
+        <p>Третий слайд может содержать контактную информацию или ссылки.</p>
+      </div>
+    </div>
+  </div>
+
+  <button class="arrow-btn arrow-left" onclick="prevSlide()">&#10094;</button>
+  <button class="arrow-btn arrow-right" onclick="nextSlide()">&#10095;</button>
+
+  <div class="slider-dots" id="sliderDots"></div>
+</div>
+
+<script>
+  const track = document.getElementById('sliderTrack');
+  const slides = document.querySelectorAll('.slide');
+  const dotsContainer = document.getElementById('sliderDots');
+  let currentIndex = 0;
+  const slidesCount = slides.length;
+
+  // Создаем точки
+  for (let i = 0; i < slidesCount; i++) {
+    const dot = document.createElement('div');
+    dot.classList.add('slider-dot');
+    if (i === 0) dot.classList.add('active');
+    dot.addEventListener('click', () => {
+      currentIndex = i;
+      updateSlider();
+    });
+    dotsContainer.appendChild(dot);
+  }
+
+  const dots = document.querySelectorAll('.slider-dot');
+
+  function updateSlider() {
+    track.style.transform = `translateX(-${currentIndex * 100}%)`;
+    dots.forEach(dot => dot.classList.remove('active'));
+    dots[currentIndex].classList.add('active');
+  }
+
+  function prevSlide() {
+    currentIndex = (currentIndex - 1 + slidesCount) % slidesCount;
+    updateSlider();
+  }
+
+  function nextSlide() {
+    currentIndex = (currentIndex + 1) % slidesCount;
+    updateSlider();
+  }
+</script>
+
+</body>
+</html>
